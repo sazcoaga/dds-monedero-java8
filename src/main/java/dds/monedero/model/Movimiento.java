@@ -31,6 +31,7 @@ public class Movimiento {
     return isExtraccion() && esDeLaFecha(fecha);
   }
 
+
   public boolean esDeLaFecha(LocalDate fecha) {
     return this.fecha.equals(fecha);
   }
@@ -43,11 +44,16 @@ public class Movimiento {
     return !esDeposito;
   }
 
+
   public void agregateA(Cuenta cuenta) {
+    //pasamanos para el saldo
     cuenta.setSaldo(calcularValor(cuenta));
+
+    //pasamanos la cuenta le pide que se agregue en vez de agregarla ella misma.
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
   }
 
+  //la cuenta deberia encargarse de esto
   public double calcularValor(Cuenta cuenta) {
     if (esDeposito) {
       return cuenta.getSaldo() + getMonto();
