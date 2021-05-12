@@ -29,10 +29,12 @@ public class Cuenta {
   }
 
   public void poner(double cuanto) {
+
+    //Monto con valor positivo necesario repetido en la linea 50 -- (duplicated code)
     if (cuanto <= 0) {
       throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
     }
-    //Se podría delegar la lógica para contar cuantos depositos se hicieron
+    //Se podría delegar la lógica para contar cuantos depositos se hicieron -- (long method)
     //Falta filtrar por fecha para saber si es diario?
     //fueDepositado se podria usar aca
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
@@ -51,7 +53,8 @@ public class Cuenta {
     if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
-    //el limite deberia ser una atributo
+    //el limite deberia ser una atributo -- (shotgun surgery: cambiar el valor del atributo sería mas -
+    // facil que cambiar en todos los lugares donde dice "1000" ).
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
     if (cuanto > limite) {
@@ -71,7 +74,7 @@ public class Cuenta {
   //deberia indicar que es por fecha el nombre
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        //el movimeinto deberia brindar la informacion del monto extraido
+        //el movimeinto deberia brindar la informacion del monto extraido -- (feature envy?)
         //existe un metodo "esDeLaFecha" y no se usa
         //existe un metodo "isExtraccion" y no se usa
         .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))

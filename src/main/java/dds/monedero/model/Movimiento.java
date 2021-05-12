@@ -46,14 +46,14 @@ public class Movimiento {
 
 
   public void agregateA(Cuenta cuenta) {
-    //pasamanos para el saldo
+    //pasamanos para el saldo -- (message chains)
     cuenta.setSaldo(calcularValor(cuenta));
 
-    //pasamanos la cuenta le pide que se agregue en vez de agregarla ella misma.
+    //pasamanos la cuenta le pide que se agregue en vez de agregarla ella misma. (message chains - misplaced method)
     cuenta.agregarMovimiento(fecha, monto, esDeposito);
   }
 
-  //la cuenta deberia encargarse de esto
+  //la cuenta deberia encargarse de esto -- (misplaced method)
   public double calcularValor(Cuenta cuenta) {
     if (esDeposito) {
       return cuenta.getSaldo() + getMonto();
