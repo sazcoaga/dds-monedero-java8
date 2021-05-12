@@ -16,7 +16,7 @@ public class Cuenta {
   private int depositosMaximos = 3;
   private double montoExtraidoMaximo = 1000;
 
-  //no convendria hacer una lista de depositos y otra de extracciones?
+
   private List<Movimiento> movimientos = new ArrayList<>();
 
 
@@ -33,17 +33,26 @@ public class Cuenta {
   }
 
   public void poner(double cuanto) {
-
-    chequearMontoNoNegativo(cuanto);
-    //Se podría delegar la lógica para contar cuantos depositos se hicieron -- (long method)
-    if (getMovimientos().stream().filter(movimiento -> movimiento.fueDepositado(LocalDate.now())).count() >= depositosMaximos) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + depositosMaximos + " depositos diarios"); //mensaje podria estar armado en la excepcion
-    }
-
+    esValidoDeposito(cuanto);
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
+void esValidoDeposito(double monto){
+    chequearMontoNoNegativo(monto);
+    chequearCantidadMaximaDepositos();
+}
 
+void chequearCantidadMaximaDepositos(){
+  if (getMovimientos().stream().filter(movimiento -> movimiento.fueDepositado(LocalDate.now())).count() >= depositosMaximos) {
+    throw new MaximaCantidadDepositosException("Ya excedio los " + depositosMaximos + " depositos diarios");
+  }
+}
+
+  void chequearMontoNoNegativo(double monto){
+    if (monto <= 0) {
+      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
+    }
+  }
   public void sacar(double cuanto) {
 
    chequearMontoNoNegativo(cuanto);
@@ -51,8 +60,6 @@ public class Cuenta {
     if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
-    //el limite deberia ser una atributo -- (shotgun surgery: cambiar el valor del atributo sería mas -
-    // facil que cambiar en todos los lugares donde dice "1000" ).
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = montoExtraidoMaximo - montoExtraidoHoy;
     if (cuanto > limite) {
@@ -69,11 +76,7 @@ public class Cuenta {
     movimientos.add(movimiento);
   }
 
-  void chequearMontoNoNegativo(double monto){
-    if (monto <= 0) {
-      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
-    }
-  }
+
 
   //deberia indicar que es por fecha el nombre
   public double getMontoExtraidoA(LocalDate fecha) {
