@@ -89,10 +89,7 @@ void chequearCantidadMaximaDepositos(){
   //deberia indicar que es por fecha el nombre
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        //el movimeinto deberia brindar la informacion del monto extraido -- (feature envy?)
-        //existe un metodo "esDeLaFecha" y no se usa
-        //existe un metodo "isExtraccion" y no se usa
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> movimiento.fueExtraido(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
