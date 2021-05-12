@@ -11,13 +11,14 @@ import java.util.List;
 
 public class Cuenta {
 
-  private double saldo = 0;
+  private double saldo;
 
   //no convendria hacer una lista de depositos y otra de extracciones?
   private List<Movimiento> movimientos = new ArrayList<>();
 
+
   public Cuenta() {
-    saldo = 0; // vale la pena inicializar algo que ya esta inicializado con default?
+    saldo = 0;
   }
 
   public Cuenta(double montoInicial) {
