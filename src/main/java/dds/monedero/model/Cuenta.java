@@ -34,6 +34,7 @@ public class Cuenta {
 
   public void poner(double cuanto) {
     validarDeposito(cuanto);
+    saldo = saldo + cuanto;
     agregarMovimiento(LocalDate.now(), cuanto, true);
   }
 
@@ -57,6 +58,7 @@ void chequearCantidadMaximaDepositos(){
   public void sacar(double cuanto) {
 
    validarExtraccion(cuanto);
+   saldo = saldo - cuanto;
     agregarMovimiento(LocalDate.now(), cuanto, false);
   }
 
@@ -103,9 +105,6 @@ void chequearCantidadMaximaDepositos(){
     return saldo;
   }
 
-  //el saldo deberia modificarse a traves de los movimientos no con un setter
-  public void setSaldo(double saldo) {
-    this.saldo = saldo;
-  }
+ 
 
 }
