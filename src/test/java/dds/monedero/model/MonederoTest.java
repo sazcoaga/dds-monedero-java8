@@ -84,4 +84,6 @@ public class MonederoTest {
     assertEquals(cuenta.getMontoExtraidoA(LocalDate.of(2021, 5, 10)), 540);
     assertEquals(cuenta.getMontoExtraidoA(LocalDate.of(2021, 5, 8)), 600);
   }
+
+
 }
