@@ -31,10 +31,7 @@ public class Cuenta {
 
   public void poner(double cuanto) {
 
-    //Monto con valor positivo necesario repetido en la linea 50 -- (duplicated code)
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
+    chequearMontoNoNegativo(cuanto);
     //Se podría delegar la lógica para contar cuantos depositos se hicieron -- (long method)
     //Falta filtrar por fecha para saber si es diario?
     //fueDepositado se podria usar aca
@@ -45,12 +42,11 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
+
   public void sacar(double cuanto) {
 
-    //podria delegarse la logica de ver si es valido el movimiento //cuanto es <= 0 esta repetido
-    if (cuanto <= 0) {
-      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
+   chequearMontoNoNegativo(cuanto);
+
     if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
@@ -72,6 +68,12 @@ public class Cuenta {
     movimientos.add(movimiento);
   }
 
+  void chequearMontoNoNegativo(double monto){
+    if (monto <= 0) {
+      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
+    }
+  }
+  
   //deberia indicar que es por fecha el nombre
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
