@@ -6,6 +6,7 @@ import dds.monedero.exceptions.MontoNegativoException;
 import dds.monedero.exceptions.SaldoMenorException;
 
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +34,8 @@ public class Cuenta {
 
     chequearMontoNoNegativo(cuanto);
     //Se podría delegar la lógica para contar cuantos depositos se hicieron -- (long method)
-    //Falta filtrar por fecha para saber si es diario?
-    //fueDepositado se podria usar aca
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+    
+    if (getMovimientos().stream().filter(movimiento -> movimiento.fueDepositado(new LocalDate())).count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios"); //mensaje podria estar armado en la excepcion
     }
 
@@ -73,7 +73,7 @@ public class Cuenta {
       throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
     }
   }
-  
+
   //deberia indicar que es por fecha el nombre
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
