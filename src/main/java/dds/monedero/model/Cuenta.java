@@ -34,7 +34,7 @@ public class Cuenta {
 
   public void poner(double cuanto) {
     validarDeposito(cuanto);
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    agregarMovimiento(LocalDate.now(), cuanto, true);
   }
 
 void validarDeposito(double monto){
@@ -57,8 +57,7 @@ void chequearCantidadMaximaDepositos(){
   public void sacar(double cuanto) {
 
    validarExtraccion(cuanto);
-    //deberia la cuenta agregar el deposito y no pedirle que se agregue
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    agregarMovimiento(LocalDate.now(), cuanto, false);
   }
 
   void validarExtraccion(double monto){
