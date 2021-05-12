@@ -13,6 +13,8 @@ import java.util.List;
 public class Cuenta {
 
   private double saldo;
+  private int depositosMaximos = 3;
+  private double montoExtraidoMaximo = 1000;
 
   //no convendria hacer una lista de depositos y otra de extracciones?
   private List<Movimiento> movimientos = new ArrayList<>();
@@ -34,9 +36,8 @@ public class Cuenta {
 
     chequearMontoNoNegativo(cuanto);
     //Se podría delegar la lógica para contar cuantos depositos se hicieron -- (long method)
-    
-    if (getMovimientos().stream().filter(movimiento -> movimiento.fueDepositado(new LocalDate())).count() >= 3) {
-      throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios"); //mensaje podria estar armado en la excepcion
+    if (getMovimientos().stream().filter(movimiento -> movimiento.fueDepositado(LocalDate.now())).count() >= depositosMaximos) {
+      throw new MaximaCantidadDepositosException("Ya excedio los " + depositosMaximos + " depositos diarios"); //mensaje podria estar armado en la excepcion
     }
 
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
@@ -53,9 +54,9 @@ public class Cuenta {
     //el limite deberia ser una atributo -- (shotgun surgery: cambiar el valor del atributo sería mas -
     // facil que cambiar en todos los lugares donde dice "1000" ).
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;
+    double limite = montoExtraidoMaximo - montoExtraidoHoy;
     if (cuanto > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + montoExtraidoMaximo
           + " diarios, límite: " + limite);
     }
 
