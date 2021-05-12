@@ -32,10 +32,10 @@ public class Cuenta {
     this.movimientos = movimientos;
   }
 
-  public void poner(double cuanto) {
-    validarDeposito(cuanto);
-    saldo = saldo + cuanto;
-    agregarMovimiento(LocalDate.now(), cuanto, true);
+  public void depositar(double montoDeposito) {
+    validarDeposito(montoDeposito);
+    saldo = saldo + montoDeposito;
+    agregarMovimiento(LocalDate.now(), montoDeposito, true);
   }
 
 void validarDeposito(double monto){
@@ -55,11 +55,11 @@ void chequearCantidadMaximaDepositos(){
     }
   }
 
-  public void sacar(double cuanto) {
+  public void extraer(double montoExtraccion) {
 
-   validarExtraccion(cuanto);
-   saldo = saldo - cuanto;
-    agregarMovimiento(LocalDate.now(), cuanto, false);
+   validarExtraccion(montoExtraccion);
+   saldo = saldo - montoExtraccion;
+    agregarMovimiento(LocalDate.now(), montoExtraccion, false);
   }
 
   void validarExtraccion(double monto){
@@ -85,8 +85,6 @@ void chequearCantidadMaximaDepositos(){
   }
 
 
-
-  //deberia indicar que es por fecha el nombre
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
         .filter(movimiento -> movimiento.fueExtraido(fecha))
