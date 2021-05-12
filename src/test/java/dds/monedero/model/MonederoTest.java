@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -21,14 +23,14 @@ public class MonederoTest {
   }
 
   @Test
-  void Poner() {
+  void DepositarUnMontoValido() {
 
      cuenta.depositar(1500);
     Assertions.assertEquals(cuenta.getSaldo(), 1500);
   }
 
   @Test
-  void PonerMontoNegativo() {
+  void DepositarMontoNegativo() {
     assertThrows(MontoNegativoException.class, () -> cuenta.depositar(-1500));
   }
 
@@ -43,7 +45,7 @@ public class MonederoTest {
   }
 
   @Test
-  void MasDeTresDepositos() {
+  void MasDeTresDepositosEnUnDia() {
     assertThrows(MaximaCantidadDepositosException.class, () -> {
           cuenta.depositar(1500);
           cuenta.depositar(456);
@@ -73,4 +75,13 @@ public class MonederoTest {
     assertThrows(MontoNegativoException.class, () -> cuenta.extraer(-500));
   }
 
+  @Test
+  public void CalculoMontoExtraidoEnUnDia(){
+
+    cuenta.agregarMovimiento(LocalDate.of(2021, 5, 10), 40, false  );
+    cuenta.agregarMovimiento(LocalDate.of(2021, 5, 10), 500, false);
+    cuenta.agregarMovimiento(LocalDate.of(2021, 5, 8), 600, false);
+    assertEquals(cuenta.getMontoExtraidoA(LocalDate.of(2021, 5, 10)), 540);
+    assertEquals(cuenta.getMontoExtraidoA(LocalDate.of(2021, 5, 8)), 600);
+  }
 }
